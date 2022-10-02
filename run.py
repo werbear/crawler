@@ -3,8 +3,6 @@
 
 import argparse
 import requests 
-from bs4 import BeautifulSoup as bs
-import cssutils as cs
 
 def argsParser():
     pars = argparse.ArgumentParser()
@@ -13,13 +11,12 @@ def argsParser():
     return pars
 
 def get_url_content(url):
-    content = requests.get(url).text
-    s = bs(content,"html.parser")
+    content = requests.get(url).text.split('"')
     
-    for elem in s.findAll("body"):
-        ws = cs.parseStyle(elem.find("a").get("style"))
-        print(f"Link: {elem.find('a').get('href')}")
-
+    for elem in content:
+        if "http" in elem:
+            print(f"Link: {elem}")
+    
 def ifFile(urllist):
     with open(urllist,"r") as f:
         for elem in f:
